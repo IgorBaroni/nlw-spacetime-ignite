@@ -1,16 +1,16 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import Icon from '@expo/vector-icons/Feather'
+import * as SecureStore from 'expo-secure-store'
 
 import NLWLogo from '../src/assets/nlw-spacetime-logo.svg'
-import { api } from '../src/lib/api'
-import { useRouter, Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import * as SecureStore from 'expo-secure-store'
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import ptBr from 'dayjs/locale/pt-br'
+import ptBR from 'dayjs/locale/pt-br'
+import { api } from '../src/lib/api'
 
-dayjs.locale(ptBr)
+dayjs.locale(ptBR)
 
 interface Memory {
   coverUrl: string
@@ -21,7 +21,6 @@ interface Memory {
 
 export default function NewMemory() {
   const { bottom, top } = useSafeAreaInsets()
-
   const router = useRouter()
   const [memories, setMemories] = useState<Memory[]>([])
 
@@ -36,7 +35,7 @@ export default function NewMemory() {
 
     const response = await api.get('/memories', {
       headers: {
-        Authorization: `Bearer: ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
 
@@ -49,21 +48,22 @@ export default function NewMemory() {
 
   return (
     <ScrollView
-      className="flex-1 px-8"
+      className="flex-1"
       contentContainerStyle={{ paddingBottom: bottom, paddingTop: top }}
     >
-      <View className="mt-4 flex-row items-center justify-between">
+      <View className="mt-4 flex-row items-center justify-between px-8">
         <NLWLogo />
+
         <View className="flex-row gap-2">
           <TouchableOpacity
             onPress={signOut}
-            className="h-10 w-10 items-center  justify-center rounded-full bg-red-500"
+            className="h-10 w-10 items-center justify-center rounded-full bg-red-500"
           >
             <Icon name="log-out" size={16} color="#000" />
           </TouchableOpacity>
 
           <Link href="/new" asChild>
-            <TouchableOpacity className="h-10 w-10 items-center  justify-center rounded-full bg-green-500">
+            <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full bg-green-500">
               <Icon name="plus" size={16} color="#000" />
             </TouchableOpacity>
           </Link>
